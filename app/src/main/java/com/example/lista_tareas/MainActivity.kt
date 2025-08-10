@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.lista_tareas.ui.theme.Lista_TareasTheme
+import com.example.lista_tareas.ui.theme.TaskScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,10 +20,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Lista_TareasTheme {
-                // A surface container using the 'background' color from the theme
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    Greeting("Android", Modifier.padding(it))
-                }
+                TaskScreen()
             }
         }
     }

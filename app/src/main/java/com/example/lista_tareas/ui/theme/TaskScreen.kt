@@ -170,6 +170,8 @@ fun TaskScreen(){
 @Composable
 @Preview(showBackground = true)
 fun TaskScreenPreview(){
-    TaskScreen()
+    Lista_TareasTheme {
+        TaskScreen()
+    }
 }
 
