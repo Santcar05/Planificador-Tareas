@@ -5,19 +5,32 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,9 +40,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.ActivityNavigator
+import androidx.navigation.compose.ComposeNavigator
+import androidx.navigation.compose.rememberNavController
 import com.example.lista_tareas.R
+import com.example.lista_tareas.data.local.local_task_provider
 
 @Composable
 fun Header(
@@ -109,35 +127,67 @@ fun SearchTextFieldPreview(){
 
 
 @Composable
-fun CardTask(){
+fun CardTask(nombreTarea: String = "Tarea",
+             fechaTarea: String = "01/01/2023",
+             modifier: Modifier = Modifier){
     //Variables de estado
 
-    Card (
-        modifier = Modifier.fillMaxWidth()
+    OutlinedCard(
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(16.dp)
-            .semantics { traversalIndex = 2F}
+            .semantics { traversalIndex = 1F },
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
+        elevation = CardDefaults.outlinedCardElevation(
+            defaultElevation = 16.dp
+        )
     ) {
-        //FONDO----
-        //Fin Background---
-        Column(
+        Row(
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            Text(
-                text = "Trabajar:)",
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(text = nombreTarea, modifier = Modifier.padding(16.dp),
+                fontWeight = FontWeight.Bold,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                overflow = TextOverflow.Ellipsis
+                )
+            Row(
+                modifier = Modifier
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
 
+            ){
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.DateRange, contentDescription = "DateRange", modifier = Modifier.padding(4.dp),
+                    )
+                Text(text = fechaTarea, modifier = Modifier.padding(4.dp))
+
+
+            }
+            Icon(
+                imageVector = androidx.compose.material.icons.Icons.Default.Delete, contentDescription = "Delete", modifier = Modifier.padding(8.dp),
+            )
+
+        }
+
+    }
 }
 
 @Composable
 @Preview(showBackground = true)
 fun CardTaskPreview(){
-    CardTask()
+    val example = local_task_provider.taskList[0]
+    Lista_TareasTheme {
+        CardTask(example.nombre, example.fechaMaxima)
+    }
 }
+
 
 @Composable
 fun TaskScreen(){
@@ -163,6 +213,11 @@ fun TaskScreen(){
                     .padding(16.dp)
                     .semantics { traversalIndex = 1F }
             )
+            LazyColumn{
+                items(local_task_provider.taskList.size){
+                    CardTask(local_task_provider.taskList[it].nombre, local_task_provider.taskList[it].fechaMaxima)
+                }
+            }
         }
     }
 }
