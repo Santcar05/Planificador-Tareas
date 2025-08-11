@@ -127,11 +127,11 @@ fun SearchTextFieldPreview(){
 
 
 @Composable
-fun CardTask(nombreTarea: String = "Tarea",
-             fechaTarea: String = "01/01/2023",
-             modifier: Modifier = Modifier){
-    //Variables de estado
-
+fun CardTask(
+    nombreTarea: String = "Tarea",
+    fechaTarea: String = "01/01/2023",
+    modifier: Modifier = Modifier
+) {
     OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -141,43 +141,54 @@ fun CardTask(nombreTarea: String = "Tarea",
             containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         elevation = CardDefaults.outlinedCardElevation(
-            defaultElevation = 16.dp
+            defaultElevation = 8.dp
         )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(text = nombreTarea, modifier = Modifier.padding(16.dp),
+        ) {
+            // Título con límite de espacio
+            Text(
+                text = nombreTarea,
+                modifier = Modifier
+                    .weight(1f) // ocupa el espacio restante pero limitado
+                    .padding(8.dp),
                 fontWeight = FontWeight.Bold,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                overflow = TextOverflow.Ellipsis
-                )
-            Row(
-                modifier = Modifier
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-
-            ){
-                Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.DateRange, contentDescription = "DateRange", modifier = Modifier.padding(4.dp),
-                    )
-                Text(text = fechaTarea, modifier = Modifier.padding(4.dp))
-
-
-            }
-            Icon(
-                imageVector = androidx.compose.material.icons.Icons.Default.Delete, contentDescription = "Delete", modifier = Modifier.padding(8.dp),
+                maxLines = 1, // solo una línea
+                overflow = TextOverflow.Ellipsis // agrega "..."
             )
 
-        }
+            // Fecha e ícono de fecha
+            Row(
+                modifier = Modifier.padding(horizontal = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.DateRange,
+                    contentDescription = "DateRange",
+                    modifier = Modifier.padding(4.dp)
+                )
+                Text(
+                    text = fechaTarea,
+                    modifier = Modifier.padding(4.dp),
+                    maxLines = 1
+                )
+            }
 
+            // Ícono de eliminar (siempre visible)
+            Icon(
+                imageVector = androidx.compose.material.icons.Icons.Default.Delete,
+                contentDescription = "Delete",
+                modifier = Modifier.padding(8.dp)
+            )
+        }
     }
 }
+
 
 @Composable
 @Preview(showBackground = true)
