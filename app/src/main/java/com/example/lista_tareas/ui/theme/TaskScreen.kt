@@ -201,12 +201,12 @@ fun CardTaskPreview(){
 
 
 @Composable
-fun TaskScreen(){
+fun TaskScreen(
+    modifier: Modifier = Modifier
+){
     //Variables de estado
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)
+    Box(modifier = modifier
     ) {
         //FONDO----
         //Fin Background---

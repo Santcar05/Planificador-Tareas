@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    // Si quieres usar Safe Args, actívalo como plugin, no como dependencia:
+    // id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -39,23 +41,35 @@ android {
     }
 }
 
-configurations.all {
-    exclude(group = "xmlpull", module = "xmlpull")
-}
-
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // BOM para Compose
     implementation(platform(libs.androidx.compose.bom))
+
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose.jvmstubs)
-    implementation(libs.androidx.navigation.safe.args.generator) {
+
+    // ✅ Solo navigation-compose, quitamos jvmstubs para evitar duplicados
+    implementation(libs.androidx.navigation.compose)
+
+    // Íconos extendidos (versión tomada del BOM)
+    implementation("androidx.compose.material:material-icons-extended")
+
+    // Dependencia que trae xmlpull → excluirlo
+    implementation("org.jsoup:jsoup:1.17.2") {
+        exclude(group = "xmlpull", module = "xmlpull")
+    }
+
+    // Dependencia que trae xpp3 → excluirlo
+    implementation("org.apache.commons:commons-compress:1.21") {
         exclude(group = "xpp3", module = "xpp3")
     }
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
